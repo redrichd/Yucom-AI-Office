@@ -28,12 +28,12 @@ jobs:
           node-version: "20"
 
       - name: Install dependencies
-        run: npm install  # 改為 install 以相容缺少的鎖定檔
+        run: npm install
 
       - name: Build
         run: npm run build
         env:
-          # 預留 API Key 接口，當您在 GitHub Settings 設定後即可生效
+          # 這裡會讀取您在 Settings > Secrets 裡設定的金鑰
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
       - name: Upload artifact
@@ -47,6 +47,10 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
+    # 這裡必須再次宣告權限
+    permissions:
+      pages: write
+      id-token: write
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
