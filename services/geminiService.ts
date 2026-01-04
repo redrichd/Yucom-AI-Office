@@ -9,17 +9,21 @@ import { SYSTEM_PROMPTS } from '../config/prompts';
  */
 export const generateToolDescription = async (name: string, category: string) => {
   try {
-    // 1. 初始化 API 客戶端
-    // 使用 import.meta.env 讀取鑰匙，紅線應該會消失了
-    const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || "");
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY || (process.env as any).GEMINI_API_KEY || "";
 
-    // 2. 初始化模型並注入系統提示詞
+    if (!apiKey || apiKey === "undefined") {
+      console.warn("Gemini API Key 未設定，請檢查 .env 檔案。");
+      return "尚未設定 API Key，請檢查環境變數。";
+    }
+
+    const genAI = new GoogleGenerativeAI(apiKey);
+
+    // 使用最新款的 gemini-2.5-flash
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
+      model: "gemini-2.5-flash",
       systemInstruction: SYSTEM_PROMPTS.TOOL_DESCRIPTION_GENERATOR,
     });
 
-    // 3. 準備並發送請求
     const prompt = `請為名為「${name}」的${category}工具生成說明。`;
     const result = await model.generateContent(prompt);
     const response = await result.response;
@@ -27,8 +31,13 @@ export const generateToolDescription = async (name: string, category: string) =>
 
     return text || "暫時無法生成說明。";
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("Gemini API 錯誤:", error);
+
+    if (error.status === 404 || error.message?.includes("not found")) {
+      return "模型連線失敗 (404)。請確認 API Key 權限或模型名稱是否正確。";
+    }
+
     return "由於連線異常，無法自動生成說明。";
   }
 };
