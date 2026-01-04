@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import { GoogleGenerativeAI } from "@google/generative-ai";
 // 引用您在 config/prompts.ts 建立的設定檔
 import { SYSTEM_PROMPTS } from '../config/prompts';
@@ -9,7 +10,8 @@ import { SYSTEM_PROMPTS } from '../config/prompts';
 export const generateToolDescription = async (name: string, category: string) => {
   try {
     // 1. 初始化 API 客戶端
-    const genAI = new GoogleGenerativeAI(process.env.API_KEY || "");
+    // 使用 import.meta.env 讀取鑰匙，紅線應該會消失了
+    const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || "");
 
     // 2. 初始化模型並注入系統提示詞
     const model = genAI.getGenerativeModel({
