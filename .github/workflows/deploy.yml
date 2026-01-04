@@ -28,10 +28,13 @@ jobs:
           node-version: "20"
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install  # 改為 install 以相容缺少的鎖定檔
 
       - name: Build
         run: npm run build
+        env:
+          # 預留 API Key 接口，當您在 GitHub Settings 設定後即可生效
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
