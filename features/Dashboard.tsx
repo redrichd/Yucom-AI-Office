@@ -164,7 +164,10 @@ export const Dashboard: React.FC = () => {
             <div className="flex items-center gap-6 pl-6 border-l border-white/5">
               <div className="flex items-center gap-4 glass-dark p-2.5 rounded-2xl border-white/10 pr-6 group cursor-pointer hover:bg-white/5 transition-colors">
                 <img src={userProfile?.photoURL || ''} className="w-10 h-10 rounded-full border-2 border-white/10 group-hover:border-green-500/50 transition-colors shadow-lg" alt="User" />
-                <span className="text-sm font-bold text-white/80 max-w-[120px] truncate tracking-tight">{userProfile?.displayName}</span>
+                <span className="text-sm font-bold text-white/80 max-w-[120px] truncate tracking-tight">
+                  {/* 使用 split(' ')[0] 截取第一個空格前的文字 */}
+                  {userProfile?.displayName?.split(' ')[0]}
+                </span>
               </div>
               
               {isAdmin && (
@@ -242,7 +245,10 @@ export const Dashboard: React.FC = () => {
                   <div className="flex items-center justify-between mt-auto">
                     <div className="flex items-center gap-3 glass-dark px-4 py-2 rounded-2xl border-white/5">
                       <img src={tool.creatorAvatar || `https://api.dicebear.com/7.x/initials/svg?seed=${tool.creatorName}`} className="w-7 h-7 rounded-full border border-white/20" alt="Creator" />
-                      <span className="text-[10px] font-black text-white/40 tracking-widest uppercase">{tool.creatorName}</span>
+                      <span className="text-[10px] font-black text-white/40 tracking-widest uppercase">
+                        {/* 同樣使用 split(' ')[0] 確保卡片版型不被職稱撐開 */}
+                        {tool.creatorName?.split(' ')[0]}
+                      </span>
                     </div>
                     
                     <button 

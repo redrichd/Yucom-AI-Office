@@ -1,26 +1,32 @@
+import { GoogleGenerativeAI } from "@google/generative-ai";
+// 引用您在 config/prompts.ts 建立的設定檔
+import { SYSTEM_PROMPTS } from '../config/prompts';
 
-import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
-
-// Standard function to generate tool descriptions using Gemini
-export const generateToolDescription = async (name: string, category: string): Promise<string> => {
+/**
+ * 悠康 AI 智能優化辦公室 - 工具說明生成服務
+ * 修正後的正確套件名稱：@google/generative-ai
+ */
+export const generateToolDescription = async (name: string, category: string) => {
   try {
-    // Create a new GoogleGenAI instance right before making an API call to ensure up-to-date config
-    const ai = new GoogleGenAI({apiKey: process.env.API_KEY});
-    
-    // Using gemini-3-flash-preview for basic text generation task
-    const response: GenerateContentResponse = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
-      contents: `Generate a short, punchy, 2-sentence description for an AI tool named "${name}" in the "${category}" category. Focus on its key benefit.`,
-      config: {
-        temperature: 0.7,
-        // Recommendation: Avoid setting maxOutputTokens if not strictly required to prevent truncation.
-      }
+    // 1. 初始化 API 客戶端
+    const genAI = new GoogleGenerativeAI(process.env.API_KEY || "");
+
+    // 2. 初始化模型並注入系統提示詞
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+      systemInstruction: SYSTEM_PROMPTS.TOOL_DESCRIPTION_GENERATOR,
     });
 
-    // Access the text property directly (it is a property, not a method)
-    return response.text?.trim() || "Failed to generate description.";
+    // 3. 準備並發送請求
+    const prompt = `請為名為「${name}」的${category}工具生成說明。`;
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text().trim();
+
+    return text || "暫時無法生成說明。";
+
   } catch (error) {
-    console.error("Gemini Error:", error);
-    return "Failed to generate description due to an internal error.";
+    console.error("Gemini API 錯誤:", error);
+    return "由於連線異常，無法自動生成說明。";
   }
 };
