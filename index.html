@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI智能優化辦公室</title>
+  
+  <!-- 自定義公司 Logo Favicon (LYC Logo) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M20 50 L50 20 L80 50 M25 50 V80 H75 V50' fill='none' stroke='%23777' stroke-width='5'/%3E%3Ctext x='35' y='75' font-family='Arial' font-weight='bold' font-size='30' fill='%238bc34a'%3ELYC%3C/text%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='white'/%3E%3Cpath d='M20 50 L50 20 L80 50 M25 50 V80 H75 V50' fill='none' stroke='%23777' stroke-width='5'/%3E%3Ctext x='35' y='75' font-family='Arial' font-weight='bold' font-size='30' fill='%238bc34a'%3ELYC%3C/text%3E%3C/svg%3E">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes move {
+      0% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -50px) scale(1.1); }
+      66% { transform: translate(-20px, 20px) scale(0.9); }
+      100% { transform: translate(0, 0) scale(1); }
+    }
+    
+    body {
+      background: #040d0b;
+      margin: 0;
+      overflow-x: hidden;
+      color: white;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    /* 細微雜訊遮罩 */
+    .noise {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      content: "";
+      opacity: 0.03;
+      z-index: -1;
+      pointer-events: none;
+      background: url('https://grainy-gradients.vercel.app/noise.svg');
+    }
+
+    /* 暗角效果 */
+    .vignette {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.6) 120%);
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    /* 改進的液態玻璃感 */
+    .glass-green {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 
+        inset 0 1px 1px rgba(255, 255, 255, 0.1),
+        0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    }
+
+    .glass-dark {
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* 圖片背景層的深度感 */
+    .bg-depth {
+      filter: blur(2px) brightness(0.8);
+      transform: scale(1.05);
+      transition: all 1s ease-out;
+    }
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
+    "firebase/": "https://esm.sh/firebase@^12.7.0/",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "@firebase/app": "https://esm.sh/@firebase/app@^0.14.6",
+    "@firebase/firestore": "https://esm.sh/@firebase/firestore@^4.9.3",
+    "@firebase/storage": "https://esm.sh/@firebase/storage@^0.14.0",
+    "@firebase/analytics": "https://esm.sh/@firebase/analytics@^0.10.19",
+    "@firebase/auth": "https://esm.sh/@firebase/auth@^1.12.0"
+  }
+}
+</script>
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="vignette"></div>
+  <div id="root"></div>
+</body>
+</html>

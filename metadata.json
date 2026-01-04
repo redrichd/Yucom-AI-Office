@@ -1,0 +1,8 @@
+{
+  "name": "Liquid Glass AI Directory",
+  "description": "A high-end AI tool navigation platform featuring liquid glassmorphism, Firebase RBAC, and Gemini-powered content assistance.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
